@@ -6,47 +6,24 @@ class Router
 
   protected $routes = [];
 
-  public function get($uri, $controller)
+  private function add($method, $uri, $controller)
   {
     $this->routes[] = [
       'uri' => $uri,
       'controller' => $controller,
-      'method' => 'GET'
+      'method' => $method
 
     ];
   }
 
-  public function post($uri, $controller)
+  private function abortConnection($code = 404)
   {
-    $this->routes[] = [
-      'uri' => $uri,
-      'controller' => $controller,
-      'method' => 'POST'
-
-    ];
+    http_response_code($code);
+    echo '<h1> 404 File Not Found </h1>'; // it's supposed to be a view but im building a restful api
+    die();
   }
 
-  public function delete($uri, $controller)
-  {
-    $this->routes[] = [
-      'uri' => $uri,
-      'controller' => $controller,
-      'method' => 'DELETE'
-
-    ];
-  }
-
-  public function put($uri, $controller)
-  {
-    $this->routes[] = [
-      'uri' => $uri,
-      'controller' => $controller,
-      'method' => 'PUT'
-
-    ];
-  }
-
-
+  // including each controller with its associated route
   public function route($uri, $method)
   {
     foreach ($this->routes as $route) {
@@ -56,13 +33,26 @@ class Router
       }
     }
 
-    $this->abort();
+    $this->abortConnection();
   }
 
-  protected function abort($code = 404)
+  public function get($uri, $controller)
   {
-    http_response_code($code);
-    echo '<h1> 404 File Not Found </h1>'; // it's supposed to be a view but im building a restful api
-    die();
+    $this->add('GET', $uri, $controller);
+  }
+
+  public function post($uri, $controller)
+  {
+    $this->add('POST', $uri, $controller);
+  }
+
+  public function delete($uri, $controller)
+  {
+    $this->add('DELETE', $uri, $controller);
+  }
+
+  public function put($uri, $controller)
+  {
+    $this->add('PUT', $uri, $controller);
   }
 }
