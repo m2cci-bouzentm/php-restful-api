@@ -3,7 +3,7 @@
 
 $main_uri = '/php-restful-api/backend/';
 
-$router = new Router();
+// $router = new Router();
 
 // get all songs
 $router->get($main_uri . 'songs', 'controllers/song/getSongs.php');

@@ -12,7 +12,11 @@ include_once 'config/dbconfig.php';
 include_once 'core/Database.php';
 include_once 'core/Router.php';
 
+// initialize a single Router instance
+$router = new Router();
+
 // include routes
+include_once 'routes/index.php';
 include_once 'routes/band.php';
 include_once 'routes/song.php';
 

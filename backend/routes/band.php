@@ -3,8 +3,7 @@
 
 $main_uri = '/php-restful-api/backend/';
 
-$router = new Router();
-
+// $router = new Router();
 
 // get all bands
 $router->get($main_uri . 'bands', 'controllers/band/getBands.php');
