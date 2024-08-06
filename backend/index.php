@@ -25,6 +25,7 @@ $router = new Router();
 include_once 'routes/index.php';
 include_once 'routes/band.php';
 include_once 'routes/song.php';
+include_once 'routes/album.php';
 
 
 

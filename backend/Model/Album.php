@@ -20,64 +20,86 @@ class Album extends Database
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    return $stmt->fetchAll();
+    $allAlbums = $stmt->fetchAll();
+    return $allAlbums;
   }
 
   public static function getAlbum($albumId)
   {
-    $sql = 'SELECT * FROM album WHERE id = ?';
+    $sql = 'SELECT * FROM albums WHERE id = ?';
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$albumId]);
 
-    $band = $stmt->fetch();
-    return $band;
+    $album = $stmt->fetch();
+    return $album;
   }
 
   public static function setAlbum($albumName, $albumReleaseYear, $bandId)
   {
-    $sql = 'INSERT INTO songs(albumName, albumReleaseYear, bandId) VALUES (?,?,?)';
+    // echo "\nhello from setAlbum !";
+    $sql = 'INSERT INTO albums(name, release_year, band_id) VALUES (?,?,?)';
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$albumName, $albumReleaseYear, $bandId]);
   }
 
-  public static function updateAlbum($albumName, $albumId, $songId)
+  public static function updateAlbum($albumName, $albumReleaseYear, $bandId, $albumId)
   {
-    $songBeforeUpdate = self::getAlbum($songId);
-    $oldName = $songBeforeUpdate['name'];
-    $oldDuration = $songBeforeUpdate['length'];
-    $oldAlbumId = $songBeforeUpdate['album_id'];
+    $albumBeforeUpdate = self::getAlbum($albumId);
+    $oldName = $albumBeforeUpdate['name'];
+    $oldReleaseYear = $albumBeforeUpdate['release_year'];
+    $oldBandId = $albumBeforeUpdate['band_id'];
 
     // making sure to keep previous values as before if not modified
-    if (!isset($songName)) {
-      $songName = $oldName;
-    }
-    if (!isset($songDuration)) {
-      $songDuration = $oldDuration;
-    }
-    if (!isset($albumId)) {
-      $albumId = $oldAlbumId;
-    }
 
-    $sql = 'UPDATE songs SET name = ?, length = ?, album_id = ? WHERE id = ?';
+    // albumName is null ? keep the old name
+
+    $albumName ??= $oldName;
+
+    // albumReleaseYear is null ? keep the old release year
+    $albumReleaseYear ??= $oldReleaseYear;
+
+    // bandId is null ? keep the old band id
+    $bandId ??= $oldBandId;
+
+
+
+    // ??= is called the null coalescing operator it returns the first operand if it exists and is not null, otherwise it returns the second operand
+
+
+
+
+    $sql = 'UPDATE albums SET name = ?, release_year = ?, band_id = ? WHERE id = ?';
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$songName, $songDuration, $albumId, $songId]);
+    $stmt->execute([$albumName, $albumReleaseYear, $bandId, $albumId]);
 
-    $songAfterUpdate = self::getSong($songId);
-    return $songAfterUpdate;
+    $albumAfterUpdate = self::getAlbum($albumId);
+    return $albumAfterUpdate;
   }
 
-  public static function deleteBand($bandId)
+  public static function deleteAlbum($albumId)
   {
-    $band = self::getBand($bandId);
+    // $album = self::getAlbum($albumId);
 
-    $sql = 'DELETE FROM bands WHERE id = ?';
+    $sql = 'DELETE FROM albums WHERE id = ?';
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$bandId]);
+    try {
+      $stmt->execute([$albumId]);
+      return true;
+    } catch (Exception $e) {
+      return false;
+    }
 
-    return $band;
   }
 }
+
+
+
+
+
+
+
+// TODO: try catch blocks for statements execution
