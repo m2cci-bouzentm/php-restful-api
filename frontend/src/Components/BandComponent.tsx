@@ -14,7 +14,7 @@ const bunkBandsList: Band[] = [
   { id: 7, name: 'Nirvana' },
   { id: 8, name: 'U2' },
   { id: 9, name: 'Metallica' },
-  { id: 10, name: 'Radiohead' },
+  { id: 10, name: 'Radioed' },
 ];
 
 const BandComponent = () => {
@@ -100,7 +100,7 @@ const BandComponent = () => {
         />
         <AddPopUp isOpen={isAddPopUp} onClose={() => setIsAddPopUp(false)} onAdd={handleBandAdd} />
 
-        {/* <DeleteConfimationPopUp /> */}
+        {/* <DeleteConfirmationPopUp /> */}
       </>
 
       {/* Sho bands components */}
