@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Band } from '../types/Band';
 import axios from 'axios';
 import EditPopUp from '../Modals/EditPopUp';
+import AddPopUp from '../Modals/AddPopUp';
 
 const bunkBandsList: Band[] = [
   { id: 1, name: 'The Beatles' },
@@ -18,10 +19,10 @@ const bunkBandsList: Band[] = [
 
 const BandComponent = () => {
   const [bandsList, setBandsList] = useState(bunkBandsList);
-
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [isPopUp, setIsPopUp] = useState(false);
+  const [isEditPopUp, setIsEditPopUp] = useState(false);
+  const [isAddPopUp, setIsAddPopUp] = useState(false);
 
   const [selectedBand, setSelectedBand] = useState({ id: -1, name: '' });
 
@@ -43,60 +44,66 @@ const BandComponent = () => {
       });
   }, [updated]);
 
-
-
-
-  const deleteBand = (bandId: number) => {
-
-
+  const handleBandDelete = (bandId: number) => {
     axios
       .delete(`http://localhost:3000/php-restful-api/backend/band?id=${bandId}`)
-      .then(res => {
+      .then((res) => {
         console.log(res);
-        setUpdated(prev => !prev);
+        setUpdated((prev) => !prev);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
-      })
-
-
-
+      });
   };
-
-
-
-
-  const openPopUp = (band: Band) => {
-    setSelectedBand(band);
-    setIsPopUp(true);
-  };
-
-
-
 
   const handleBandSave = (band: Band) => {
-    console.log({ ...band });
-
-    axios.put("http://localhost:3000/php-restful-api/backend/band", { ...band })
-      .then(res => {
-        console.log("updated ?");
+    axios
+      .put('http://localhost:3000/php-restful-api/backend/band', { ...band })
+      .then((res) => {
+        console.log('updated ?');
         console.log(res.data);
-        setUpdated(prev => !prev);
+        setUpdated((prev) => !prev);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const handleBandAdd = (name: string) => {
+    axios
+      .post('http://localhost:3000/php-restful-api/backend/band', { name })
+      .then((res) => {
+        console.log(res.data);
+        setUpdated((prev) => !prev);
       })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const openEditPopUp = (band: Band) => {
+    setSelectedBand(band);
+    setIsEditPopUp(true);
+  };
+  const openAddPopUp = () => {
+    setIsAddPopUp(true);
+  };
 
   return (
     <>
-      <EditPopUp
-        isOpen={isPopUp}
-        onClose={() => setIsPopUp(false)}
-        onSave={handleBandSave}
-        band={selectedBand}
-      />
+      <>
+        <EditPopUp
+          isOpen={isEditPopUp}
+          onClose={() => setIsEditPopUp(false)}
+          onSave={handleBandSave}
+          band={selectedBand}
+        />
+        <AddPopUp isOpen={isAddPopUp} onClose={() => setIsAddPopUp(false)} onAdd={handleBandAdd} />
 
+        {/* <DeleteConfimationPopUp /> */}
+      </>
+
+      {/* Sho bands components */}
       <div className="p-4">
         <div className="max-w-md mx-auto">
           <input
@@ -118,13 +125,13 @@ const BandComponent = () => {
                   <span>
                     <button
                       className="text-blue-500 hover:text-blue-700 mr-2"
-                      onClick={() => openPopUp(band)}
+                      onClick={() => openEditPopUp(band)}
                     >
                       Edit
                     </button>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => deleteBand(band.id)}
+                      onClick={() => handleBandDelete(band.id)}
                     >
                       Delete
                     </button>
@@ -135,6 +142,13 @@ const BandComponent = () => {
               <li className="p-2 text-gray-500">No bands found</li>
             )}
           </ul>
+
+          <button
+            onClick={openAddPopUp}
+            className="w-full bg-green-500 text-white my-4 px-4 py-4 rounded hover:bg-green-700"
+          >
+            Add Band
+          </button>
         </div>
       </div>
     </>
