@@ -3,6 +3,7 @@ import { Band } from '../types/Band';
 import axios from 'axios';
 import EditPopUp from '../Modals/EditPopUp';
 import AddPopUp from '../Modals/AddPopUp';
+import DeleteConfirmPopUp from '../Modals/DeleteConfirmPopUp';
 
 const bunkBandsList: Band[] = [
   { id: 1, name: 'The Beatles' },
@@ -23,6 +24,7 @@ const BandComponent = () => {
 
   const [isEditPopUp, setIsEditPopUp] = useState(false);
   const [isAddPopUp, setIsAddPopUp] = useState(false);
+  const [isDeletionConfirmPopUp, setIsDeletionConfirmPopUp] = useState(false);
 
   const [selectedBand, setSelectedBand] = useState({ id: -1, name: '' });
 
@@ -81,6 +83,7 @@ const BandComponent = () => {
       });
   };
 
+
   const openEditPopUp = (band: Band) => {
     setSelectedBand(band);
     setIsEditPopUp(true);
@@ -98,9 +101,19 @@ const BandComponent = () => {
           onSave={handleBandSave}
           band={selectedBand}
         />
-        <AddPopUp isOpen={isAddPopUp} onClose={() => setIsAddPopUp(false)} onAdd={handleBandAdd} />
+        <AddPopUp
+          isOpen={isAddPopUp}
+          onClose={() => setIsAddPopUp(false)}
+          onAdd={handleBandAdd}
+        />
 
         {/* <DeleteConfirmationPopUp /> */}
+        <DeleteConfirmPopUp
+          isOpen={isDeletionConfirmPopUp}
+          onClose={() => setIsDeletionConfirmPopUp(false)}
+          onYes={handleBandDelete}
+          band={selectedBand}
+        />
       </>
 
       {/* Sho bands components */}
@@ -131,7 +144,9 @@ const BandComponent = () => {
                     </button>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => handleBandDelete(band.id)}
+                      onClick={() => {
+                        setSelectedBand(band); setIsDeletionConfirmPopUp(true);
+                      }}
                     >
                       Delete
                     </button>
