@@ -25,6 +25,8 @@ const BandComponent = () => {
 
   const [selectedBand, setSelectedBand] = useState({ id: -1, name: '' });
 
+  const [updated, setUpdated] = useState(false);
+
   const filteredBands = bandsList.filter((band) =>
     band.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -39,24 +41,59 @@ const BandComponent = () => {
       .catch(function (error) {
         console.log(error);
       });
-  }, []);
+  }, [updated]);
 
-  const deleteBand = (bandName: string) => {
-    alert(`Deleting ${bandName}`);
+
+
+
+  const deleteBand = (bandId: number) => {
+
+
+    axios
+      .delete(`http://localhost:3000/php-restful-api/backend/band?id=${bandId}`)
+      .then(res => {
+        console.log(res);
+        setUpdated(prev => !prev);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+
+
   };
+
+
+
+
   const openPopUp = (band: Band) => {
     setSelectedBand(band);
     setIsPopUp(true);
   };
 
+
+
+
+  const handleBandSave = (band: Band) => {
+    console.log({ ...band });
+
+    axios.put("http://localhost:3000/php-restful-api/backend/band", { ...band })
+      .then(res => {
+        console.log("updated ?");
+        console.log(res.data);
+        setUpdated(prev => !prev);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
   return (
     <>
       <EditPopUp
         isOpen={isPopUp}
-        onClose={() => {
-          setIsPopUp(false);
-        }}
-        onSave={() => null}
+        onClose={() => setIsPopUp(false)}
+        onSave={handleBandSave}
         band={selectedBand}
       />
 
@@ -87,7 +124,7 @@ const BandComponent = () => {
                     </button>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => deleteBand(band.name)}
+                      onClick={() => deleteBand(band.id)}
                     >
                       Delete
                     </button>

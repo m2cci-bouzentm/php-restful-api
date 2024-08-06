@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Band } from '../types/Band';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (name: string) => void;
+  onSave: (band: Band) => void;
   band: Band;
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSave, band }) => {
+
+
   const [value, setValue] = useState(band.name);
+
+
+  useEffect(() => {
+    setValue(band.name);
+  }, [band]);
+
+
+  console.log(band.name);
+
 
   if (!isOpen) return null;
 
   const handleSave = () => {
-    onSave(band.name);
+
+    // if the old name is the same as the new one. we avoid the db sollicitation by NOT calling the onSave method
+    if (value !== band.name) {
+      onSave({ id: band.id, name: value });
+    }
     onClose();
 
     // update by band.id
@@ -26,7 +41,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSave, band }) => {
         <h2 className="text-lg font-bold mb-2">Edit Band Name</h2>
         <input
           type="text"
-          value={value.length ? value : band.name}
+          value={value}
           onChange={(e) => setValue(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded mb-4"
         />
