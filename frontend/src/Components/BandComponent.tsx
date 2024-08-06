@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Band } from '../types/Band';
 import axios from 'axios';
+import EditPopUp from '../Modals/EditPopUp';
 
 const bunkBandsList: Band[] = [
   { id: 1, name: 'The Beatles' },
@@ -18,6 +19,16 @@ const bunkBandsList: Band[] = [
 const BandComponent = () => {
   const [bandsList, setBandsList] = useState(bunkBandsList);
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const [isPopUp, setIsPopUp] = useState(false);
+
+  const [selectedBand, setSelectedBand] = useState({ id: -1, name: '' });
+
+  const filteredBands = bandsList.filter((band) =>
+    band.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   useEffect(() => {
     axios
       .get('http://localhost:3000/php-restful-api/backend/bands')
@@ -30,53 +41,66 @@ const BandComponent = () => {
       });
   }, []);
 
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredBands = bandsList.filter((band) =>
-    band.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const deleteBand = (bandName: string) => {
+    alert(`Deleting ${bandName}`);
+  };
+  const openPopUp = (band: Band) => {
+    setSelectedBand(band);
+    setIsPopUp(true);
+  };
 
   return (
-    <div className="p-4">
-      <div className="max-w-md mx-auto">
-        <input
-          type="text"
-          placeholder="Search for a band"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded mb-4"
-        />
-        <ul className="bg-white shadow-lg rounded">
-          {filteredBands.length > 0 ? (
-            filteredBands.map((band, index) => (
-              <li
-                data-id={band.id}
-                key={index}
-                className="cursor-pointer p-2 border-b border-gray-200 last:border-none flex justify-between items-center transition-transform transform hover:scale-105 hover:bg-blue-100"
-              >
-                <span>{band.name}</span>
-                <span>
-                  <button
-                    className="text-blue-500 hover:text-blue-700 mr-2"
-                    onClick={() => alert(`Editing ${band}`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="text-red-500 hover:text-red-700"
-                    onClick={() => alert(`Deleting ${band}`)}
-                  >
-                    Delete
-                  </button>
-                </span>
-              </li>
-            ))
-          ) : (
-            <li className="p-2 text-gray-500">No bands found</li>
-          )}
-        </ul>
+    <>
+      <EditPopUp
+        isOpen={isPopUp}
+        onClose={() => {
+          setIsPopUp(false);
+        }}
+        onSave={() => null}
+        band={selectedBand}
+      />
+
+      <div className="p-4">
+        <div className="max-w-md mx-auto">
+          <input
+            type="text"
+            placeholder="Search for a band"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded mb-4"
+          />
+          <ul className="bg-white shadow-lg rounded">
+            {filteredBands.length > 0 ? (
+              filteredBands.map((band, index) => (
+                <li
+                  data-id={band.id}
+                  key={index}
+                  className="cursor-pointer p-2 border-b border-gray-200 last:border-none flex justify-between items-center transition-transform transform hover:scale-105 hover:bg-blue-100"
+                >
+                  <span>{band.name}</span>
+                  <span>
+                    <button
+                      className="text-blue-500 hover:text-blue-700 mr-2"
+                      onClick={() => openPopUp(band)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => deleteBand(band.name)}
+                    >
+                      Delete
+                    </button>
+                  </span>
+                </li>
+              ))
+            ) : (
+              <li className="p-2 text-gray-500">No bands found</li>
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
