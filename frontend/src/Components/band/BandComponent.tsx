@@ -15,6 +15,10 @@ interface BandProps {
 }
 
 const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const [isEditPopUp, setIsEditPopUp] = useState(false);
@@ -30,6 +34,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   );
 
   const handleBandDelete = (bandId: number) => {
+    setIsLoading(true);
     axios
       .delete(`http://localhost:3000/php-restful-api/backend/band?id=${bandId}`)
       .then(() => {
@@ -38,10 +43,12 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
       .catch((err) => {
         console.log(err);
         setIsCantDeletePopUp(true);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const handleBandSave = (band: Band) => {
+    setIsLoading(true);
     axios
       .put('http://localhost:3000/php-restful-api/backend/band', { ...band })
       .then(() => {
@@ -49,10 +56,12 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const handleBandAdd = (name: string) => {
+    setIsLoading(true);
     axios
       .post('http://localhost:3000/php-restful-api/backend/band', { name })
       .then(() => {
@@ -60,7 +69,8 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const openEditPopUp = (band: Band) => {
@@ -118,6 +128,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
         setIsDeletionConfirmPopUp={setIsDeletionConfirmPopUp}
         openAddPopUp={openAddPopUp}
         openBandInspectionPopUp={openBandInspectionPopUp}
+        isLoading={isLoading}
       />
     </>
   );

@@ -10,6 +10,7 @@ interface ShowBandProps {
   setIsDeletionConfirmPopUp: (isConfirmation: boolean) => void;
   openAddPopUp: () => void;
   openBandInspectionPopUp: (event: React.MouseEvent, band: Band) => void;
+  isLoading: boolean;
 }
 
 const ShowBand: React.FC<ShowBandProps> = ({
@@ -21,6 +22,7 @@ const ShowBand: React.FC<ShowBandProps> = ({
   setIsDeletionConfirmPopUp,
   openAddPopUp,
   openBandInspectionPopUp,
+  isLoading
 }) => {
   return (
     <div className="p-4">
@@ -32,6 +34,8 @@ const ShowBand: React.FC<ShowBandProps> = ({
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded mb-4"
         />
+
+
 
         <ul className="bg-white shadow-lg rounded">
           {filteredBands.length > 0 ? (
@@ -67,12 +71,15 @@ const ShowBand: React.FC<ShowBandProps> = ({
           )}
         </ul>
 
+
         <button
           onClick={openAddPopUp}
           className="w-full bg-green-500 text-white my-4 px-4 py-4 rounded hover:bg-green-700"
-        >
+          >
+          
           Add Band
         </button>
+          {isLoading && <span className=' text-blue-500'>Updating...</span>}
       </div>
     </div>
   );
