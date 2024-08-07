@@ -7,7 +7,7 @@ const Nav = () => {
         <Link to="/" className="text-white text-lg hover:text-blue-200">
           Bands
         </Link>
-        <Link to="/album" className="text-white text-lg hover:text-blue-200">
+        <Link to="/albums" className="text-white text-lg hover:text-blue-200">
           Albums
         </Link>
         <Link to="/songs" className="text-white text-lg hover:text-blue-200">

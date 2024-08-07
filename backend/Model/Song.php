@@ -35,6 +35,18 @@ class Song extends Database
     return $song;
   }
 
+
+  public static function getSongByAlbumId($album_id)
+  {
+    $sql = 'SELECT * FROM songs WHERE album_id = ?';
+    $pdo = self::getConnection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$album_id]);
+    $songs = $stmt->fetchAll();
+
+    return $songs;
+  }
+
   public static function setSong($songName, $songDuration, $albumId)
   {
     $sql = 'INSERT INTO songs(name, length, album_id) VALUES (?,?,?)';

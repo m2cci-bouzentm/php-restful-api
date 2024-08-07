@@ -6,6 +6,7 @@ import AddPopUp from '../../Modals/album/AddPopUp';
 import EditPopUp from '../../Modals/album/EditPopUp';
 import DeleteConfirmPopUp from '../../Modals/album/DeleteConfirmPopUp';
 import CantDeletePopUp from '../../Modals/album/CantDeletePopUp';
+import AlbumInspectionPopUp from '../../Modals/album/AlbumInspectionPopUp';
 
 interface AlbumsProps {
   albumsList: Album[];
@@ -27,6 +28,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const [isDeleteAlbumPopUp, setIsDeleteAlbumPopUp] = useState(false);
   const [isCantDeletion, setIsCantDeletion] = useState(false);
+  const [albumInspectionPopUp, setAlbumInspectionPopUp] = useState(false);
 
   const filteredAlbums = albumsList.filter((album: Album) =>
     album.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -78,6 +80,14 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   return (
     <div className="flex justify-around px-52">
+
+      <AlbumInspectionPopUp
+        isOpen={albumInspectionPopUp}
+        onClose={() => setAlbumInspectionPopUp(false)}
+        album={selectedAlbum}
+      />
+
+
       <AddPopUp
         isOpen={isAddPopUp}
         onClose={() => setIsAddPopUp(false)}
@@ -171,7 +181,16 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
                   albumsList
                     .filter((album) => album.band_id === band.id)
                     .map((album) => (
-                      <li key={album.id} className="p-2 border-b border-gray-200 last:border-none">
+                      <li
+                        key={album.id}
+                        className="p-2 border-b border-gray-200 last:border-none hover:text-blue-500 cursor-pointer"
+                        onClick={
+                          () => {
+                            setAlbumInspectionPopUp(true);
+                            setSelectedAlbum(album);
+                          }
+                        }
+                      >
                         <span>{album.name}</span>{' '}
                         <span className="text-gray-500">({album.release_year})</span>
                       </li>
