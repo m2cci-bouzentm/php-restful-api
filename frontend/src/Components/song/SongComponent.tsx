@@ -1,55 +1,50 @@
-import React, { useState } from 'react'
-import { Song } from '../../types/Song'
+import React, { useState } from 'react';
+import { Song } from '../../types/Song';
 import { Album } from '../../types/Album';
 import { Band } from '../../types/Band';
 import axios from 'axios';
 import AddPopUp from '../../Modals/song/AddPopUp';
-
-
-
 
 interface SongComponentProps {
     bandsList: Band[];
     albumsList: Album[];
     songsList: Song[];
     setUpdated: (isUpdated: boolean | ((prev: boolean) => boolean)) => void;
-
 }
 
-
-const SongComponent: React.FC<SongComponentProps> = ({ bandsList, albumsList, songsList, setUpdated }) => {
+const SongComponent: React.FC<SongComponentProps> = ({
+    bandsList,
+    albumsList,
+    songsList,
+    setUpdated,
+}) => {
     const [isAddPopUp, setIsAddPopUp] = useState(false);
     // const [isEditPopUp, setIsEditPopUp] = useState(false);
     // const [isDeleteSongPopUp, setIsDeleteSongPopUp] = useState(false);
 
     const [selectedSong, setSelectedSong] = useState<Song>({
         id: -1,
-        name: "",
+        name: '',
         length: -1,
         album_id: -1,
     });
 
     const [searchTerm, setSearchTerm] = useState('');
 
-
     const handleSongAdd = (name: string, length: number, album_id: number) => {
         axios
-          .post('http://localhost:3000/php-restful-api/backend/song', { name, length, album_id })
-          .then(() => {
-            setUpdated((prev) => !prev);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-
-
+            .post('http://localhost:3000/php-restful-api/backend/song', { name, length, album_id })
+            .then(() => {
+                setUpdated((prev) => !prev);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     const filteredSongs = songsList.filter((song: Song) =>
         song.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-
 
     const openAddPopUp = () => {
         setIsAddPopUp(true);
@@ -57,13 +52,12 @@ const SongComponent: React.FC<SongComponentProps> = ({ bandsList, albumsList, so
 
     return (
         <>
-
             <AddPopUp
-                isOpen={isAddPopUp} 
-                onClose={() => setIsAddPopUp(false)} 
-                onAdd={handleSongAdd} 
-                albumsList={albumsList} />
-
+                isOpen={isAddPopUp}
+                onClose={() => setIsAddPopUp(false)}
+                onAdd={handleSongAdd}
+                albumsList={albumsList}
+            />
 
             <div className="max-w-md mx-auto">
                 <input
@@ -119,8 +113,6 @@ const SongComponent: React.FC<SongComponentProps> = ({ bandsList, albumsList, so
                 </button>
             </div>
         </>
-
-
     );
 };
 

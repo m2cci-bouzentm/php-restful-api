@@ -26,14 +26,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onAdd, albumsList }) => 
         <h2 className="text-lg font-bold mb-2">Add a Song</h2>
         <input
           type="text"
-          placeholder='Song Name'
+          placeholder="Song Name"
           onChange={(e) => setName(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded mb-4"
         />
         <input
           type="number"
-          placeholder='Duration'
-          onChange={(e) => setDuration(e.target.value)}
+          placeholder="Duration"
+          onChange={(e) => setLength(Number(e.target.value))}
           className="w-full p-2 border border-gray-300 rounded mb-4"
         />
 
