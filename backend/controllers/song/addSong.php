@@ -6,10 +6,11 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 
 $name = $data['name'] ?? null;
-$duration = $data['duration'] ?? null;
-$albumId = $data['album-id'] ?? null;
+$duration = $data['length'] ?? null;
+$albumId = $data['album_id'] ?? null;
 
 
-if (strlen($name) !== 0 && strlen($duration) && $albumId) {
+
+if (isset($name) && isset($duration) && isset($albumId)) {
   Song::setSong($name, $duration, $albumId);
 }
