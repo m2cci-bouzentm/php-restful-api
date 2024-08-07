@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Album } from '../../types/Album';
 import { Band } from '../../types/Band';
 import axios from 'axios';
+import AddPopUp from '../../Modals/album/AddPopUp';
+import EditPopUp from '../../Modals/album/EditPopUp';
 import DeleteConfirmPopUp from '../../Modals/album/DeleteConfirmPopUp';
 import CantDeletePopUp from '../../Modals/album/CantDeletePopUp';
 
@@ -12,15 +14,19 @@ interface AlbumsProps {
 }
 
 const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) => {
-  // const [isAddAlbumPopUp, setIsAddAlbumPopUp] = useState<boolean>(false);
-  const [selectedAlbum, setSelectedAlbum] = useState({ id: -1, name: "", release_year: 0, band_id: -1 });
+  const [isAddPopUp, setIsAddPopUp] = useState(false);
+  const [isEditPopUp, setIsEditPopUp] = useState(false);
+  const [selectedAlbum, setSelectedAlbum] = useState<Album>({
+    id: -1,
+    name: '',
+    release_year: -1,
+    band_id: -1,
+  });
 
   const [searchTerm, setSearchTerm] = useState('');
 
-
-  const [isDeleteAlbumPopUp, setisDeleteAlbumPopUp] = useState(false);
+  const [isDeleteAlbumPopUp, setIsDeleteAlbumPopUp] = useState(false);
   const [isCantDeletion, setIsCantDeletion] = useState(false);
-
 
   const filteredAlbums = albumsList.filter((album: Album) =>
     album.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -37,38 +43,67 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
       });
   };
 
+  const handleAlbumEdit = (album: Album) => {
+    axios
+      .put('http://localhost:3000/php-restful-api/backend/album', { ...album })
+      .then((res) => {
+        console.log(res.data);
+
+        setUpdated((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleAlbumDelete = (albumId: number) => {
     axios
-      .delete("http://localhost:3000/php-restful-api/backend/album", { data: { id: albumId } })
-      .then((res) => {
-        setUpdated(prev => !prev);
+      .delete('http://localhost:3000/php-restful-api/backend/album', { data: { id: albumId } })
+      .then(() => {
+        setUpdated((prev) => !prev);
       })
       .catch((err) => {
+        console.log(err);
         setIsCantDeletion(true);
-      })
-  }
+      });
+  };
 
-  console.log(handleAlbumAdd);
+  const openAddPopUp = () => {
+    setIsAddPopUp(true);
+  };
+  const openEditPopUp = (album: Album) => {
+    setSelectedAlbum(album);
+    setIsEditPopUp(true);
+  };
 
   return (
     <div className="flex justify-around px-52">
-
+      <AddPopUp
+        isOpen={isAddPopUp}
+        onClose={() => setIsAddPopUp(false)}
+        onAdd={handleAlbumAdd}
+        bandsList={bandsList}
+      />
+      <EditPopUp
+        isOpen={isEditPopUp}
+        onClose={() => setIsEditPopUp(false)}
+        onSave={handleAlbumEdit}
+        album={selectedAlbum}
+        bandsList={bandsList}
+      />
 
       <DeleteConfirmPopUp
         isOpen={isDeleteAlbumPopUp}
-        onClose={() => setisDeleteAlbumPopUp(false)}
+        onClose={() => setIsDeleteAlbumPopUp(false)}
         onYes={handleAlbumDelete}
         album={selectedAlbum}
       />
-
 
       <CantDeletePopUp
         isOpen={isCantDeletion}
         onClose={() => setIsCantDeletion(false)}
         album={selectedAlbum}
       />
-
 
       <div className="p-4 w-[50%]">
         <div className="max-w-md mx-auto">
@@ -87,13 +122,16 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
                   data-id={album.id}
                   key={index}
                   className="cursor-pointer p-2 border-b border-gray-200 last:border-none flex justify-between items-center transition-transform transform hover:bg-blue-100"
-                // onClick={(e) => openBandInspectionPopUp(e, band)}
+                  onClick={() => setSelectedAlbum(album)}
                 >
-                  <span>{album.name}</span>
+                  <span>
+                    {album.name} ({album.release_year})
+                  </span>
+
                   <span>
                     <button
                       className="text-blue-500 hover:text-blue-700 mr-2"
-                    // onClick={() => openEditPopUp(band)}
+                      onClick={() => openEditPopUp(album)}
                     >
                       Edit
                     </button>
@@ -101,7 +139,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
                       className="text-red-500 hover:text-red-700"
                       onClick={() => {
                         setSelectedAlbum(album);
-                        setisDeleteAlbumPopUp(true);
+                        setIsDeleteAlbumPopUp(true);
                       }}
                     >
                       Delete
@@ -110,12 +148,12 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
                 </li>
               ))
             ) : (
-              <li className="p-2 text-gray-500">No songs found</li>
+              <li className="p-2 text-gray-500">No albums found</li>
             )}
           </ul>
 
           <button
-            // onClick={openAddPopUp}
+            onClick={openAddPopUp}
             className="w-full bg-green-500 text-white my-4 px-4 py-4 rounded hover:bg-green-700"
           >
             Add Album
