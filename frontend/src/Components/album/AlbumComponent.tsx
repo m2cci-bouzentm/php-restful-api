@@ -4,6 +4,8 @@ import { Band } from '../../types/Band';
 import axios from 'axios';
 import AddPopUp from '../../Modals/album/AddPopUp';
 import EditPopUp from '../../Modals/album/EditPopUp';
+import DeleteConfirmPopUp from '../../Modals/album/DeleteConfirmPopUp';
+import CantDeletePopUp from '../../Modals/album/CantDeletePopUp';
 
 interface AlbumsProps {
   albumsList: Album[];
@@ -22,6 +24,9 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
   });
 
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [isDeleteAlbumPopUp, setIsDeleteAlbumPopUp] = useState(false);
+  const [isCantDeletion, setIsCantDeletion] = useState(false);
 
   const filteredAlbums = albumsList.filter((album: Album) =>
     album.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -51,6 +56,18 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
       });
   };
 
+  const handleAlbumDelete = (albumId: number) => {
+    axios
+      .delete('http://localhost:3000/php-restful-api/backend/album', { data: { id: albumId } })
+      .then(() => {
+        setUpdated((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsCantDeletion(true);
+      });
+  };
+
   const openAddPopUp = () => {
     setIsAddPopUp(true);
   };
@@ -73,6 +90,19 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
         onSave={handleAlbumEdit}
         album={selectedAlbum}
         bandsList={bandsList}
+      />
+
+      <DeleteConfirmPopUp
+        isOpen={isDeleteAlbumPopUp}
+        onClose={() => setIsDeleteAlbumPopUp(false)}
+        onYes={handleAlbumDelete}
+        album={selectedAlbum}
+      />
+
+      <CantDeletePopUp
+        isOpen={isCantDeletion}
+        onClose={() => setIsCantDeletion(false)}
+        album={selectedAlbum}
       />
 
       <div className="p-4 w-[50%]">
@@ -107,10 +137,10 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
                     </button>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      // onClick={() => {
-                      //   setSelectedBand(band);
-                      //   setIsDeletionConfirmPopUp(true);
-                      // }}
+                      onClick={() => {
+                        setSelectedAlbum(album);
+                        setIsDeleteAlbumPopUp(true);
+                      }}
                     >
                       Delete
                     </button>
