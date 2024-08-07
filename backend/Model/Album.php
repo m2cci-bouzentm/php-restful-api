@@ -35,6 +35,18 @@ class Album extends Database
     return $album;
   }
 
+
+  public static function getAlbumByBandId($band_id)
+  {
+    $sql = 'SELECT * FROM albums WHERE band_id = ?';
+    $pdo = self::getConnection();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$band_id]);
+
+    $albums = $stmt->fetchAll();
+    return $albums;
+  }
+
   public static function setAlbum($albumName, $albumReleaseYear, $bandId)
   {
     // echo "\nhello from setAlbum !";

@@ -8,6 +8,7 @@ $main_uri = '/php-restful-api/backend/';
 // get all albums
 $router->get($main_uri . 'albums', 'controllers/album/getAlbums.php');
 
+
 // get one album by id
 $router->get($main_uri . 'album', 'controllers/album/getAlbum.php');
 

@@ -7,6 +7,7 @@ import CantDeletePopUp from '../../Modals/CantDeletePopUp';
 import ShowBand from './ShowBand';
 
 import axios from 'axios';
+import BandInspectionPopUp from '../../Modals/BandInspectionPopUp';
 
 interface BandProps {
   bandsList: Band[];
@@ -20,6 +21,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const [isAddPopUp, setIsAddPopUp] = useState(false);
   const [isDeletionConfirmPopUp, setIsDeletionConfirmPopUp] = useState(false);
   const [isCantDeletePopUp, setIsCantDeletePopUp] = useState(false);
+  const [isBandInspected, setIsBandInspected] = useState(false);
 
   const [selectedBand, setSelectedBand] = useState({ id: -1, name: '' });
 
@@ -73,6 +75,11 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
     setIsAddPopUp(true);
   };
 
+  const openBandInspectionPopUp = (band: Band) => {
+    setSelectedBand(band);
+    setIsBandInspected(true);
+  }
+
   return (
     <>
       <>
@@ -94,6 +101,11 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
           onClose={() => setIsCantDeletePopUp(false)}
           band={selectedBand}
         />
+        <BandInspectionPopUp
+          isOpen={isBandInspected}
+          onClose={() => setIsBandInspected(false)}
+          band={selectedBand}
+        />
       </>
 
       {/* Show bands components */}
@@ -105,6 +117,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
         setSelectedBand={setSelectedBand}
         setIsDeletionConfirmPopUp={setIsDeletionConfirmPopUp}
         openAddPopUp={openAddPopUp}
+        openBandInspectionPopUp={openBandInspectionPopUp}
       />
     </>
   );
