@@ -10,3 +10,4 @@ define('HOST', 'localhost');
 define('DBNAME', 'record_company');
 define('USER', 'root');
 define('PWD', 123456);
+// define('PWD', "");

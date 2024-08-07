@@ -7,6 +7,10 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 
+if ($_SERVER['REQUEST_METHOD'] === "OPTIONS") {
+    die();
+}
+
 // auto load my Model classes
 include 'includes/auto-loader.php';
 
@@ -25,6 +29,7 @@ $router = new Router();
 include_once 'routes/index.php';
 include_once 'routes/band.php';
 include_once 'routes/song.php';
+include_once 'routes/album.php';
 
 
 
