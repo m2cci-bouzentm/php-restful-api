@@ -36,13 +36,14 @@ const AlbumInspectionPopUp: React.FC<AlbumInspectionProps> = ({ isOpen, onClose,
     return (
         <div className="fixed z-20 inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
             <div className="bg-white p-4 rounded shadow-lg w-96 max-h-96 overflow-y-auto">
-                <h2 className="text-lg font-bold mb-2 sticky relative top-0 bg-white">All {album.name}'s Songs</h2>
+                <h2 className="text-lg font-bold mb-2 sticky relative top-0 bg-white">All <em>{album.name}</em>'s Songs</h2>
                 {isLoading && <span className='text-blue-500'>Loading...</span>}
                 <ul className=''>
                     {albumSongs.length ? (
                         albumSongs.map((song: Song) => (
                             <li key={song.id} className="p-2 border-b border-gray-200 last:border-none">
-                                <span>{song.name}</span>{' '}
+                                <span>{song.name}</span>{' ~ '}
+                                <span className='text-red-500'>{Math.round(song.length)}min</span>
                             </li>
                         ))
                     ) : (
