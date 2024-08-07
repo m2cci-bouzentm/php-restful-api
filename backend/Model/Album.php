@@ -93,18 +93,22 @@ class Album extends Database
 
   public static function deleteAlbum($albumId)
   {
-    // $album = self::getAlbum($albumId);
+    $album = self::getAlbum($albumId);
 
     $sql = 'DELETE FROM albums WHERE id = ?';
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
+
     try {
       $stmt->execute([$albumId]);
-      return true;
     } catch (Exception $e) {
-      return false;
+      if ($e->getCode() === '23000') {
+        http_response_code(403);
+        return $e->getMessage();
+      }
     }
 
+    return true;
   }
 }
 

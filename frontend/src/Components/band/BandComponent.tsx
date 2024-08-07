@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Band } from '../../types/Band';
-import EditPopUp from '../../Modals/EditPopUp';
-import AddPopUp from '../../Modals/AddPopUp';
-import DeleteConfirmPopUp from '../../Modals/DeleteConfirmPopUp';
-import CantDeletePopUp from '../../Modals/CantDeletePopUp';
+import EditPopUp from '../../Modals/band/EditPopUp';
+import AddPopUp from '../../Modals/band/AddPopUp';
+import DeleteConfirmPopUp from '../../Modals/band/DeleteConfirmPopUp';
+import CantDeletePopUp from '../../Modals/band/CantDeletePopUp';
 import ShowBand from './ShowBand';
 
 import axios from 'axios';
-import BandInspectionPopUp from '../../Modals/BandInspectionPopUp';
+import BandInspectionPopUp from '../../Modals/band/BandInspectionPopUp';
 
 interface BandProps {
   bandsList: Band[];
@@ -32,12 +32,11 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandDelete = (bandId: number) => {
     axios
       .delete(`http://localhost:3000/php-restful-api/backend/band?id=${bandId}`)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         setUpdated((prev) => !prev);
       })
       .catch((err) => {
-        console.log(err.status);
+        console.log(err);
         setIsCantDeletePopUp(true);
       });
   };
@@ -45,9 +44,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandSave = (band: Band) => {
     axios
       .put('http://localhost:3000/php-restful-api/backend/band', { ...band })
-      .then((res) => {
-        console.log('updated ?');
-        console.log(res.data);
+      .then(() => {
         setUpdated((prev) => !prev);
       })
       .catch((err) => {
@@ -58,8 +55,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandAdd = (name: string) => {
     axios
       .post('http://localhost:3000/php-restful-api/backend/band', { name })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         setUpdated((prev) => !prev);
       })
       .catch((err) => {
@@ -75,10 +71,14 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
     setIsAddPopUp(true);
   };
 
-  const openBandInspectionPopUp = (band: Band) => {
-    setSelectedBand(band);
-    setIsBandInspected(true);
-  }
+  const openBandInspectionPopUp = (event: React.MouseEvent, band: Band) => {
+    const target = event.target as HTMLElement;
+
+    if (target.localName !== 'button') {
+      setSelectedBand(band);
+      setIsBandInspected(true);
+    }
+  };
 
   return (
     <>

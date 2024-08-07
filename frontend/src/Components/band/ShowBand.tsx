@@ -1,6 +1,5 @@
 import React from 'react';
 import { Band } from '../../types/Band';
-import BandInspectionPopUp from '../../Modals/BandInspectionPopUp';
 
 interface ShowBandProps {
   filteredBands: Band[];
@@ -10,7 +9,7 @@ interface ShowBandProps {
   setSelectedBand: (band: Band) => void;
   setIsDeletionConfirmPopUp: (isConfirmation: boolean) => void;
   openAddPopUp: () => void;
-  openBandInspectionPopUp: (band: Band) => void;
+  openBandInspectionPopUp: (event: React.MouseEvent, band: Band) => void;
 }
 
 const ShowBand: React.FC<ShowBandProps> = ({
@@ -21,7 +20,7 @@ const ShowBand: React.FC<ShowBandProps> = ({
   setSelectedBand,
   setIsDeletionConfirmPopUp,
   openAddPopUp,
-  openBandInspectionPopUp
+  openBandInspectionPopUp,
 }) => {
   return (
     <div className="p-4">
@@ -34,17 +33,14 @@ const ShowBand: React.FC<ShowBandProps> = ({
           className="w-full p-2 border border-gray-300 rounded mb-4"
         />
 
-        <ul
-          className="bg-white shadow-lg rounded"
-
-        >
+        <ul className="bg-white shadow-lg rounded">
           {filteredBands.length > 0 ? (
             filteredBands.map((band, index) => (
               <li
                 data-id={band.id}
                 key={index}
                 className="cursor-pointer p-2 border-b border-gray-200 last:border-none flex justify-between items-center transition-transform transform hover:scale-105 hover:bg-blue-100"
-                onClick={() => openBandInspectionPopUp(band)}
+                onClick={(e) => openBandInspectionPopUp(e, band)}
               >
                 <span>{band.name}</span>
                 <span>

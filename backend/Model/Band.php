@@ -58,7 +58,16 @@ class Band extends Database
     $sql = 'DELETE FROM bands WHERE id = ?';
     $pdo = self::getConnection();
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$bandId]);
+
+    try {
+      $stmt->execute([$bandId]);
+    } catch (Exception $e) {
+      if ($e->getCode() === '23000') {
+        http_response_code(403);
+        return $e->getMessage();
+      }
+    }
+
 
     return $band;
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Band } from '../types/Band';
+import { Band } from '../../types/Band';
 
 interface ModalProps {
   isOpen: boolean;
