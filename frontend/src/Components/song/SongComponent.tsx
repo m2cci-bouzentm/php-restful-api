@@ -4,6 +4,9 @@ import { Album } from '../../types/Album';
 import { Band } from '../../types/Band';
 import axios from 'axios';
 import AddPopUp from '../../Modals/song/AddPopUp';
+import EditPopUp from '../../Modals/song/EditPopUp';
+import DeleteConfirmPopUp from '../../Modals/song/DeleteConfirmPopUp';
+import SongInspectionPopUp from '../../Modals/song/SongInspectionPopUp';
 
 interface SongComponentProps {
   bandsList: Band[];
@@ -19,8 +22,9 @@ const SongComponent: React.FC<SongComponentProps> = ({
   setUpdated,
 }) => {
   const [isAddPopUp, setIsAddPopUp] = useState(false);
-  // const [isEditPopUp, setIsEditPopUp] = useState(false);
-  // const [isDeleteSongPopUp, setIsDeleteSongPopUp] = useState(false);
+  const [isEditPopUp, setIsEditPopUp] = useState(false);
+  const [isDeleteSongPopUp, setIsDeleteSongPopUp] = useState(false);
+  const [songInspectionPopUp, setSongInspectionPopUp] = useState(false);
 
   const [selectedSong, setSelectedSong] = useState<Song>({
     id: -1,
@@ -28,12 +32,19 @@ const SongComponent: React.FC<SongComponentProps> = ({
     length: -1,
     album_id: -1,
   });
-
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSongAdd = (name: string, length: number, album_id: number) => {
+  const filteredSongs = songsList.filter((song: Song) =>
+    song.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSongAdd = (name: string, length: number, albumId: number) => {
     axios
-      .post('http://localhost:3000/php-restful-api/backend/song', { name, length, album_id })
+      .post('http://localhost:3000/php-restful-api/backend/song', {
+        name,
+        length,
+        album_id: albumId,
+      })
       .then(() => {
         setUpdated((prev) => !prev);
       })
@@ -42,23 +53,80 @@ const SongComponent: React.FC<SongComponentProps> = ({
       });
   };
 
-  const filteredSongs = songsList.filter((song: Song) =>
-    song.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleSongEdit = (songId: number, name: string, length: number, albumId: number) => {
+    axios
+      .put('http://localhost:3000/php-restful-api/backend/song', {
+        id: songId,
+        name,
+        length,
+        album_id: albumId,
+      })
+      .then(() => {
+        setUpdated((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleSongDelete = (songId: number) => {
+    axios
+      .delete(`http://localhost:3000/php-restful-api/backend/song?id=${songId}`)
+      .then(() => {
+        setUpdated((prev) => !prev);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const openAddPopUp = () => {
     setIsAddPopUp(true);
   };
+  const openEditPopUp = (song: Song) => {
+    setSelectedSong(song);
+    setIsEditPopUp(true);
+  };
+  const openDeletePopUp = (song: Song) => {
+    setSelectedSong(song);
+    setIsDeleteSongPopUp(true);
+  };
+  const openSongInspectionPopUp = (event: React.MouseEvent, song: Song) => {
+    const target = event.target as HTMLElement;
+    if (target.localName !== 'button') {
+      setSelectedSong(song);
+      setSongInspectionPopUp(true);
+    }
+  };
 
-  console.log(bandsList, selectedSong);
+  // console.log(bandsList);
 
   return (
     <>
+      <SongInspectionPopUp
+        isOpen={songInspectionPopUp}
+        onClose={() => setSongInspectionPopUp(false)}
+        song={selectedSong}
+      />
+
       <AddPopUp
         isOpen={isAddPopUp}
         onClose={() => setIsAddPopUp(false)}
         onAdd={handleSongAdd}
         albumsList={albumsList}
+      />
+      <EditPopUp
+        isOpen={isEditPopUp}
+        onClose={() => setIsEditPopUp(false)}
+        onSave={handleSongEdit}
+        song={selectedSong}
+        albumsList={albumsList}
+      />
+
+      <DeleteConfirmPopUp
+        isOpen={isDeleteSongPopUp}
+        onClose={() => setIsDeleteSongPopUp(false)}
+        onYes={handleSongDelete}
+        song={selectedSong}
       />
 
       <div className="max-w-md mx-auto">
@@ -77,7 +145,7 @@ const SongComponent: React.FC<SongComponentProps> = ({
                 data-id={song.id}
                 key={index}
                 className="cursor-pointer p-2 border-b border-gray-200 last:border-none flex justify-between items-center transition-transform transform hover:bg-blue-100"
-                onClick={() => setSelectedSong(song)}
+                onClick={(e) => openSongInspectionPopUp(e, song)}
               >
                 <span>
                   {song.name} ({song.length.toFixed(2)}mn)
@@ -86,16 +154,13 @@ const SongComponent: React.FC<SongComponentProps> = ({
                 <span>
                   <button
                     className="text-blue-500 hover:text-blue-700 mr-2"
-                    // onClick={() => openEditPopUp(album)}
+                    onClick={() => openEditPopUp(song)}
                   >
                     Edit
                   </button>
                   <button
                     className="text-red-500 hover:text-red-700"
-                    onClick={() => {
-                      setSelectedSong(song);
-                      // setIsDeleteSongPopUp(true);
-                    }}
+                    onClick={() => openDeletePopUp(song)}
                   >
                     Delete
                   </button>

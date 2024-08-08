@@ -77,6 +77,10 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
     setSelectedAlbum(album);
     setIsEditPopUp(true);
   };
+  const openDeletePopUp = (album: Album) => {
+    setSelectedAlbum(album);
+    setIsDeleteAlbumPopUp(true);
+  };
 
   return (
     <div className="flex justify-around px-52">
@@ -145,10 +149,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
                     </button>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => {
-                        setSelectedAlbum(album);
-                        setIsDeleteAlbumPopUp(true);
-                      }}
+                      onClick={() => openDeletePopUp(album)}
                     >
                       Delete
                     </button>
