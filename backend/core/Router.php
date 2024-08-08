@@ -27,6 +27,7 @@ class Router
   public function route($uri, $method)
   {
     foreach ($this->routes as $route) {
+      print_r($route);
       if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
         include $route['controller'];
         return;
