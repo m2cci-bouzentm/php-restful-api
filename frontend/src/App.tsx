@@ -35,8 +35,6 @@ function App() {
     axios
       .get('http://localhost:3000/php-restful-api/backend/albums')
       .then(function (response) {
-        console.log(response.data);
-
         setAlbumsList(response.data);
       })
       .catch(function (error) {
@@ -65,8 +63,17 @@ function App() {
             <AlbumComponent albumsList={albumsList} bandsList={bandsList} setUpdated={setUpdated} />
           }
         />
-        <Route path="/songs" element={<SongComponent
-          bandsList={bandsList} albumsList={albumsList} songsList={songsList} setUpdated={setUpdated} />} />
+        <Route
+          path="/songs"
+          element={
+            <SongComponent
+              bandsList={bandsList}
+              albumsList={albumsList}
+              songsList={songsList}
+              setUpdated={setUpdated}
+            />
+          }
+        />
       </Routes>
 
       <Footer />

@@ -22,12 +22,13 @@ const SongInspectionPopUp: React.FC<SongInspectionProps> = ({ isOpen, onClose, s
 
   const getAlbumBand = async () => {
     const resAlbum = await axios.get(
-      `http://localhost:3000/php-restful-api/backend/albums?id=${song.album_id}`
+      `http://localhost:3000/php-restful-api/backend/album?id=${song.album_id}`
     );
-    setAlbumSong(resAlbum.data);
     const resBand = await axios.get(
-      `http://localhost:3000/php-restful-api/backend/bands?id=${albumSong.band_id}`
+      `http://localhost:3000/php-restful-api/backend/band?id=${resAlbum.data.band_id}`
     );
+
+    setAlbumSong(resAlbum.data);
     setBandSong(resBand.data);
   };
   useEffect(() => {
