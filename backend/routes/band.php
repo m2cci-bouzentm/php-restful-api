@@ -1,7 +1,7 @@
 <?php
 
 
-$main_uri = '/php-restful-api/backend/';
+$main_uri = '';
 
 // $router = new Router();
 
