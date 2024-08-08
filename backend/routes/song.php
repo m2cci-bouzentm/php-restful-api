@@ -1,7 +1,7 @@
 <?php
 
 
-$main_uri = '';
+$main_uri = '/';
 
 // $router = new Router();
 
