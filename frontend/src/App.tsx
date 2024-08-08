@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/php-restful-api/backend/bands')
+      .get('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/bands')
       .then(function (response) {
         setBandsList(response.data);
       })
@@ -33,7 +33,7 @@ function App() {
       });
 
     axios
-      .get('http://localhost:3000/php-restful-api/backend/albums')
+      .get('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/albums')
       .then(function (response) {
         setAlbumsList(response.data);
       })
@@ -42,7 +42,7 @@ function App() {
       });
 
     axios
-      .get('http://localhost:3000/php-restful-api/backend/songs')
+      .get('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/songs')
       .then(function (response) {
         setSongsList(response.data);
       })

@@ -15,9 +15,7 @@ interface BandProps {
 }
 
 const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
-
   const [isLoading, setIsLoading] = useState(false);
-
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -36,7 +34,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandDelete = (bandId: number) => {
     setIsLoading(true);
     axios
-      .delete(`http://localhost:3000/php-restful-api/backend/band?id=${bandId}`)
+      .delete(`http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/band?id=${bandId}`)
       .then(() => {
         setUpdated((prev) => !prev);
       })
@@ -50,7 +48,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandSave = (band: Band) => {
     setIsLoading(true);
     axios
-      .put('http://localhost:3000/php-restful-api/backend/band', { ...band })
+      .put('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/band', { ...band })
       .then(() => {
         setUpdated((prev) => !prev);
       })
@@ -63,7 +61,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandAdd = (name: string) => {
     setIsLoading(true);
     axios
-      .post('http://localhost:3000/php-restful-api/backend/band', { name })
+      .post('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/band', { name })
       .then(() => {
         setUpdated((prev) => !prev);
       })

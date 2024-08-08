@@ -33,7 +33,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
 
   const handleSongAdd = (name: string, length: number, albumId: number) => {
     axios
-      .post('http://localhost:3000/php-restful-api/backend/song', {
+      .post('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/song', {
         name,
         length,
         album_id: albumId,
@@ -48,7 +48,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
 
   const handleSongEdit = (songId: number, name: string, length: number, albumId: number) => {
     axios
-      .put('http://localhost:3000/php-restful-api/backend/song', {
+      .put('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/song', {
         id: songId,
         name,
         length,
@@ -63,7 +63,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
   };
   const handleSongDelete = (songId: number) => {
     axios
-      .delete(`http://localhost:3000/php-restful-api/backend/song?id=${songId}`)
+      .delete(`http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/song?id=${songId}`)
       .then(() => {
         setUpdated((prev) => !prev);
       })
