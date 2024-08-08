@@ -6,7 +6,7 @@
 // define('USER', $_ENV['DB_USER']);
 // define('PWD', $_ENV['123456']);
 
-define('HOST', 'localhost');
+define('HOST', 'db-php-restfulapi.cnuk4uooyk59.eu-north-1.rds.amazonaws.com');
 define('DBNAME', 'record_company');
 define('USER', 'root');
-define('PWD', 123456);
+define('PWD', 12345678);
