@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Song } from '../../types/Song';
 import { Album } from '../../types/Album';
-import { Band } from '../../types/Band';
 import axios from 'axios';
 import AddPopUp from '../../Modals/song/AddPopUp';
 import EditPopUp from '../../Modals/song/EditPopUp';
@@ -9,18 +8,12 @@ import DeleteConfirmPopUp from '../../Modals/song/DeleteConfirmPopUp';
 import SongInspectionPopUp from '../../Modals/song/SongInspectionPopUp';
 
 interface SongComponentProps {
-  bandsList: Band[];
   albumsList: Album[];
   songsList: Song[];
   setUpdated: (isUpdated: boolean | ((prev: boolean) => boolean)) => void;
 }
 
-const SongComponent: React.FC<SongComponentProps> = ({
-  bandsList,
-  albumsList,
-  songsList,
-  setUpdated,
-}) => {
+const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, setUpdated }) => {
   const [isAddPopUp, setIsAddPopUp] = useState(false);
   const [isEditPopUp, setIsEditPopUp] = useState(false);
   const [isDeleteSongPopUp, setIsDeleteSongPopUp] = useState(false);
@@ -97,8 +90,6 @@ const SongComponent: React.FC<SongComponentProps> = ({
       setSongInspectionPopUp(true);
     }
   };
-
-  // console.log(bandsList);
 
   return (
     <>

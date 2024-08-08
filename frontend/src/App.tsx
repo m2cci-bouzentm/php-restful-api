@@ -66,12 +66,7 @@ function App() {
         <Route
           path="/songs"
           element={
-            <SongComponent
-              bandsList={bandsList}
-              albumsList={albumsList}
-              songsList={songsList}
-              setUpdated={setUpdated}
-            />
+            <SongComponent albumsList={albumsList} songsList={songsList} setUpdated={setUpdated} />
           }
         />
       </Routes>
