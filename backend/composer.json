@@ -1,0 +1,22 @@
+{
+  "name": "php-restful-api/php-restful-api",
+  "description": "A PHP RESTful API for managing albums, bands, and songs.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mohamed Bouzentouta",
+      "homepage": "https://www.bouzentoutamohamed.online",
+      "role": "Developer"
+    },
+    {
+      "name": "Ilyes Benamour",
+      "homepage": "https://www.ilyesbenameur.tech",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "~8",
+    "ext-mbstring": "*",
+    "ext-pdo_pgsql": "*"
+  }
+}
