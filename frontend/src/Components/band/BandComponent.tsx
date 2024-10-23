@@ -50,7 +50,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandSave = (band: Band) => {
     setIsLoading(true);
     axios
-      .put('http://localhost:3000/php-restful-api/backend/band', { ...band })
+      .put(import.meta.env.VITE_API_URL + '/band', { ...band })
       .then(() => {
         setUpdated((prev) => !prev);
       })
@@ -63,7 +63,7 @@ const BandComponent: React.FC<BandProps> = ({ bandsList, setUpdated }) => {
   const handleBandAdd = (name: string) => {
     setIsLoading(true);
     axios
-      .post('http://localhost:3000/php-restful-api/backend/band', { name })
+      .post(import.meta.env.VITE_API_URL + '/band', { name })
       .then(() => {
         setUpdated((prev) => !prev);
       })

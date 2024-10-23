@@ -33,7 +33,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
 
   const handleSongAdd = (name: string, length: number, albumId: number) => {
     axios
-      .post('http://localhost:3000/php-restful-api/backend/song', {
+      .post(import.meta.env.VITE_API_URL + '/song', {
         name,
         length,
         album_id: albumId,
@@ -48,7 +48,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
 
   const handleSongEdit = (songId: number, name: string, length: number, albumId: number) => {
     axios
-      .put('http://localhost:3000/php-restful-api/backend/song', {
+      .put(import.meta.env.VITE_API_URL + '/song', {
         id: songId,
         name,
         length,

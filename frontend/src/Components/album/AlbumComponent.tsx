@@ -36,7 +36,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const handleAlbumAdd = (name: string, release_year: number, band_id: number) => {
     axios
-      .post('http://localhost:3000/php-restful-api/backend/album', { name, release_year, band_id })
+      .post(import.meta.env.VITE_API_URL + '/album', { name, release_year, band_id })
       .then(() => {
         setUpdated((prev) => !prev);
       })
@@ -47,7 +47,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const handleAlbumEdit = (album: Album) => {
     axios
-      .put('http://localhost:3000/php-restful-api/backend/album', { ...album })
+      .put(import.meta.env.VITE_API_URL + '/album', { ...album })
       .then((res) => {
         console.log(res.data);
 
@@ -60,7 +60,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const handleAlbumDelete = (albumId: number) => {
     axios
-      .delete('http://localhost:3000/php-restful-api/backend/album', { data: { id: albumId } })
+      .delete(import.meta.env.VITE_API_URL + '/album', { data: { id: albumId } })
       .then(() => {
         setUpdated((prev) => !prev);
       })
