@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Song } from '../../types/Song';
 import { Album } from '../../types/Album';
 import axios from 'axios';
@@ -18,22 +18,26 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
   const [isEditPopUp, setIsEditPopUp] = useState(false);
   const [isDeleteSongPopUp, setIsDeleteSongPopUp] = useState(false);
   const [songInspectionPopUp, setSongInspectionPopUp] = useState(false);
+  const [filteredSongs, setFilteredSongs] = useState<Song[] | null>(null);
 
   const [selectedSong, setSelectedSong] = useState<Song>({
     id: -1,
-    name: '',
+    name: '-1',
     length: -1,
     album_id: -1,
   });
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredSongs = songsList.filter((song: Song) =>
-    song.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    if (songsList)
+      setFilteredSongs(
+        songsList.filter((song: Song) => song.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+  }, []);
 
   const handleSongAdd = (name: string, length: number, albumId: number) => {
     axios
-      .post('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/song', {
+      .post('https://php-rest-api.fly.dev/php-restful-api/backend/song', {
         name,
         length,
         album_id: albumId,
@@ -48,7 +52,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
 
   const handleSongEdit = (songId: number, name: string, length: number, albumId: number) => {
     axios
-      .put('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/song', {
+      .put('https://php-rest-api.fly.dev/php-restful-api/backend/song', {
         id: songId,
         name,
         length,
@@ -63,7 +67,7 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
   };
   const handleSongDelete = (songId: number) => {
     axios
-      .delete(`http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/song?id=${songId}`)
+      .delete(`https://php-rest-api.fly.dev/php-restful-api/backend/song?id=${songId}`)
       .then(() => {
         setUpdated((prev) => !prev);
       })
@@ -130,16 +134,16 @@ const SongComponent: React.FC<SongComponentProps> = ({ albumsList, songsList, se
         />
 
         <ul className="bg-white shadow-lg rounded overflow-y-auto h-[500px]">
-          {filteredSongs.length > 0 ? (
-            filteredSongs.map((song, index) => (
+          {filteredSongs && filteredSongs.length > 0 ? (
+            filteredSongs.map((song:Song) => (
               <li
                 data-id={song.id}
-                key={index}
+                key={song.id}
                 className="cursor-pointer p-2 border-b border-gray-200 last:border-none flex justify-between items-center transition-transform transform hover:bg-blue-100"
                 onClick={(e) => openSongInspectionPopUp(e, song)}
               >
                 <span>
-                  {song.name} ({song.length.toFixed(2)}mn)
+                  {song.name} ({Number(song.length).toFixed(2)}mn)
                 </span>
 
                 <span>

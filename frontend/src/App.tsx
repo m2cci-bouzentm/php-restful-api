@@ -7,7 +7,7 @@ import BandComponent from './Components/band/BandComponent';
 import AlbumComponent from './Components/album/AlbumComponent';
 import SongComponent from './Components/song/SongComponent';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/bands')
+      .get('https://php-rest-api.fly.dev/php-restful-api/backend/bands')
       .then(function (response) {
         setBandsList(response.data);
       })
@@ -33,7 +33,7 @@ function App() {
       });
 
     axios
-      .get('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/albums')
+      .get('https://php-rest-api.fly.dev/php-restful-api/backend/albums')
       .then(function (response) {
         setAlbumsList(response.data);
       })
@@ -42,7 +42,7 @@ function App() {
       });
 
     axios
-      .get('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/songs')
+      .get('https://php-rest-api.fly.dev/php-restful-api/backend/songs')
       .then(function (response) {
         setSongsList(response.data);
       })
@@ -66,9 +66,11 @@ function App() {
         <Route
           path="/songs"
           element={
-            <SongComponent albumsList={albumsList} songsList={songsList} setUpdated={setUpdated} />
+             <SongComponent albumsList={albumsList} songsList={songsList} setUpdated={setUpdated} />
           }
         />
+
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
 
       <Footer />

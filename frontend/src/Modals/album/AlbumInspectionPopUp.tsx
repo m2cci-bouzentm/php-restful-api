@@ -18,7 +18,7 @@ const AlbumInspectionPopUp: React.FC<AlbumInspectionProps> = ({ isOpen, onClose,
       setAlbumSongs([]);
       setIsLoading(true);
       axios
-        .get(`http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/songs?album_id=${album.id}`)
+        .get(`https://php-rest-api.fly.dev/php-restful-api/backend/songs?album_id=${album.id}`)
         .then((res) => {
           setIsLoading(false);
           console.log(res.data);

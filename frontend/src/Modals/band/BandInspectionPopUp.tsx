@@ -17,7 +17,7 @@ const BandInspectionPopUp: React.FC<ModalProps> = ({ isOpen, onClose, band }) =>
     if (isOpen) {
       setIsLoading(true);
       axios
-        .get(`http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/albums?band_id=${band.id}`)
+        .get(`https://php-rest-api.fly.dev/php-restful-api/backend/albums?band_id=${band.id}`)
         .then((res) => {
           setIsLoading(false);
           console.log(res.data);

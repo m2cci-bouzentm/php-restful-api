@@ -36,7 +36,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const handleAlbumAdd = (name: string, release_year: number, band_id: number) => {
     axios
-      .post('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/album', {
+      .post('https://php-rest-api.fly.dev/php-restful-api/backend/album', {
         name,
         release_year,
         band_id,
@@ -51,7 +51,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const handleAlbumEdit = (album: Album) => {
     axios
-      .put('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/album', { ...album })
+      .put('https://php-rest-api.fly.dev/php-restful-api/backend/album', { ...album })
       .then((res) => {
         console.log(res.data);
 
@@ -64,7 +64,7 @@ const Albums: React.FC<AlbumsProps> = ({ albumsList, bandsList, setUpdated }) =>
 
   const handleAlbumDelete = (albumId: number) => {
     axios
-      .delete('http://ec2-16-171-4-203.eu-north-1.compute.amazonaws.com/album', {
+      .delete('https://php-rest-api.fly.dev/php-restful-api/backend/album', {
         data: { id: albumId },
       })
       .then(() => {
